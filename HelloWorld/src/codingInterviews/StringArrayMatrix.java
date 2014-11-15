@@ -1,49 +1,102 @@
 package codingInterviews;
 
+import java.util.Arrays;
+import java.util.EmptyStackException;
+import java.util.Iterator;
 import java.util.Stack;
+import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 public class StringArrayMatrix {
 
-	public static void main(String[] args) {
+    private static final class TokenIterator implements Iterator<String> {
 
-		String[] tokens = new String[] { "4", "13", "5", "/", "+" };
-		System.out.println(evalRPN(tokens));
-	}
+        private final StringTokenizer tokenizer;
 
-	public static int evalRPN(String[] tokens) {
-		int ans = 0;
-		String operators = "+-*/";
-		Stack<String> stack = new Stack<String>();
-		for (String t : tokens) {
-			if (!operators.contains(t)) {
-				stack.push(t);
-			} else {
-				int a = Integer.valueOf(stack.pop());
-				int b = Integer.valueOf(stack.pop());
-				switch (t) {
-				case "+":
-					stack.push(String.valueOf(a + b));
-					break;
+        TokenIterator(String input) {
+            super();
+            this.tokenizer = new StringTokenizer(input);
+        }
 
-				case "-":
-					stack.push(String.valueOf(b - a));
-					break;
+        @Override
+        public boolean hasNext() {
+            return tokenizer.hasMoreTokens();
+        }
 
-				case "*":
-					stack.push(String.valueOf(a * b));
-					break;
+        @Override
+        public String next() {
+            return tokenizer.nextToken();
+        }
+    }
 
-				case "/":
-					stack.push(String.valueOf(b / a));
-					break;
+    private static final class Tokenizer implements Iterable<String> {
 
-				}
+        private final String input;
 
-			}
+        Tokenizer(String input) {
+            super();
+            this.input = input;
+        }
 
-		}// for
-		ans = Integer.valueOf(stack.pop());
-		return ans;
+        @Override
+        public Iterator<String> iterator() {
+            return new TokenIterator(input);
+        }
+    }
 
-	}
+    private static final Pattern Number = Pattern.compile("\\d+");
+
+    private static final Pattern Operator = Pattern.compile("[-+/*]");
+
+    public static int evalRPN(Iterable<String> tokens) {
+        Stack<Integer> stack = new Stack<>();
+
+        try {
+            for (String token : tokens) {
+                if (Operator.matcher(token).matches()) {
+                    int rhs = stack.pop().intValue();
+                    int lhs = stack.pop().intValue();
+
+                    switch (token.charAt(0)) {
+                    case '+':
+                        stack.push(Integer.valueOf(lhs + rhs));
+                        break;
+                    case '-':
+                        stack.push(Integer.valueOf(lhs - rhs));
+                        break;
+                    case '*':
+                        stack.push(Integer.valueOf(lhs * rhs));
+                        break;
+                    case '/':
+                        if (rhs == 0) {
+                            throw new ArithmeticException("division by zero");
+                        }
+                        stack.push(Integer.valueOf(lhs / rhs));
+                        break;
+                    }
+                } else if (Number.matcher(token).matches()) {
+                    stack.push(Integer.valueOf(token));
+                } else {
+                    throw new IllegalArgumentException(token);
+                }
+            }
+
+            return stack.pop().intValue();
+        } catch (EmptyStackException e) {
+            // TODO map to better exception
+            return 0;
+        }
+    }
+
+    public static int evalRPN(String expr) {
+        return evalRPN(new Tokenizer(expr));
+    }
+
+    public static void main(String[] args) {
+        String[] tokens = new String[] { "4", "13", "5", "/", "+" };
+
+        System.out.println(evalRPN(Arrays.asList(tokens)));
+
+        System.out.println(evalRPN("4 13 5 / +"));
+    }
 }
