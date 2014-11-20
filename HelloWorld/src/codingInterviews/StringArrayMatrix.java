@@ -11,7 +11,10 @@ public class StringArrayMatrix {
 
     private static final class TokenIterator implements Iterator<String> {
 
+
         private final StringTokenizer tokenizer;
+
+
 
         TokenIterator(String input) {
             super();
@@ -43,6 +46,7 @@ public class StringArrayMatrix {
             return new TokenIterator(input);
         }
     }
+
 
     private static final Pattern Number = Pattern.compile("\\d+");
 
@@ -92,11 +96,20 @@ public class StringArrayMatrix {
         return evalRPN(new Tokenizer(expr));
     }
 
+    public static String findLongestPalindrome(String word) {
+        return null;
+        // TODO return properly
+    }
+
     public static void main(String[] args) {
         String[] tokens = new String[] { "4", "13", "5", "/", "+" };
 
         System.out.println(evalRPN(Arrays.asList(tokens)));
 
         System.out.println(evalRPN("4 13 5 / +"));
+
+        for (String word : args) {
+            System.out.println(findLongestPalindrome(word));
+        }
     }
 }
