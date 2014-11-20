@@ -8,6 +8,8 @@ public class StringArrayMatrix {
 
 		String[] tokens = new String[] { "4", "13", "5", "/", "+" };
 		System.out.println(evalRPN(tokens));
+
+		String word = System.out.println(findLongestPalindrome(word));
 	}
 
 	public static int evalRPN(String[] tokens) {
@@ -44,6 +46,13 @@ public class StringArrayMatrix {
 		}// for
 		ans = Integer.valueOf(stack.pop());
 		return ans;
+
+	}
+
+	public static String findLongestPalindrome(String) {
+
+		return null;
+		// TODO return properly
 
 	}
 }
