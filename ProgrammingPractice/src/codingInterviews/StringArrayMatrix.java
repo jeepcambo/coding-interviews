@@ -92,21 +92,11 @@ public class StringArrayMatrix {
 		return evalRPN(new Tokenizer(expr));
 	}
 
-	public static String findLongestPalindrome(
-			@SuppressWarnings("unused") String word) {
-		return null;
-		// TODO return properly
-	}
-
 	public static void main(String[] args) {
 		String[] tokens = new String[] { "4", "13", "5", "/", "+" };
 
 		System.out.println(evalRPN(Arrays.asList(tokens)));
 
 		System.out.println(evalRPN("4 13 5 / +"));
-
-		for (String word : args) {
-			System.out.println(findLongestPalindrome(word));
-		}
 	}
 }
