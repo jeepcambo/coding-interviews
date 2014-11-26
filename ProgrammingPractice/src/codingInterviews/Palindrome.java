@@ -1,8 +1,7 @@
 package codingInterviews;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.StringTokenizer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Jeff
@@ -12,70 +11,79 @@ import java.util.StringTokenizer;
  */
 public class Palindrome {
 
-	public static String[] findLongestPalindrome(String query) {
-		Integer length = new Integer(query.length());
+	public static List<String> findLongestPalindrome(String s) {
 
 		// Remove any capitalization
-		query = query.toLowerCase();
-		if (length == 0)
+
+		if (s.isEmpty())
 			throw new Error("String is empty.");
 		else {
-			String longest = query.toString();
-			if (length == 1)
-				// The only letter must be the longest palindrome
-				return new String[] { longest };
-			else {
-				// Check for longer palindromes
-				for (int i = 0; i < length; i++) {
-					Character toMatch = new Character(query.charAt(i));
-					int palindrome_start = i;
-					int palindrome_end = query.lastIndexOf(toMatch.charValue());
-					if (palindrome_end != -1) {
-						if (isPalindromic(query.substring(palindrome_start,
-								palindrome_end))) {
-							// TODO
-						}
+			s = s.toLowerCase();
+			List<String> longest = new ArrayList<String>();
+			longest.add(s.substring(0, 1));
+			// Check for longer palindromes
+			for (int i = 1; i < s.length(); i++) {
+				// Odd palindrome
+				int begin = i;
+				int end = begin;
 
+				while ((begin > 0) && (end < s.length() - 1)) {
+
+					if (s.charAt(begin - 1) == s.charAt(end + 1)) {
+						begin--;
+						end++;
+					} else {
+						break;
+					}
+				}
+				if (s.substring(begin, end + 1).length() > longest.get(0)
+						.length()) {
+					longest.clear();
+					longest.add(s.substring(begin, end + 1));
+				}
+
+				else if (s.substring(begin, end + 1).length() == longest.get(0)
+						.length())
+					longest.add(s.substring(begin, end + 1));
+
+				// TODO fix bugs in even
+				// Even palindrome
+				if (i < s.length() - 1) {
+					// There can be no even palindrome if the pointer is already
+					// at the last character
+					begin = i;
+					end = begin + 1;
+
+					while ((begin > 0) && (end < s.length() - 1)) {
+
+						if (s.charAt(begin - 1) == s.charAt(end + 1)) {
+							begin--;
+							end++;
+						} else {
+							break;
+						}
 					}
 
+					if (s.substring(begin, end + 1).length() > longest.get(0)
+							.length()) {
+						longest.clear();
+						longest.add(s.substring(begin, end + 1));
+					}
+
+					else if (s.substring(begin, end + 1).length() == longest
+							.get(0).length())
+						longest.add(s.substring(begin, end + 1));
 				}
+
 			}
-
-			// TODO
-			return new String[] { longest };
+			return longest;
 		}
-
-	}
-
-	private static boolean isPalindromic(String word) {
-		//
-		try {
-
-			if ((word.length() & 1) == 0) {
-				// Even
-				String first_half = word.substring(0, (word.length() / 2));
-				String end_half = new StringBuilder(word.substring(
-						word.length() / 2, word.length())).reverse().toString();
-				return first_half.equals(end_half);
-			} else {
-				// Odd
-				int midPoint = (word.length() - 1) / 2;
-				String first_half = word.substring(0, midPoint);
-				String end_half = new StringBuilder(word.substring(
-						midPoint + 1, word.length())).reverse().toString();
-				return first_half.equals(end_half);
-			}
-		} catch (NullPointerException e) {
-			System.err.println("NullPointerException: " + e.getMessage());
-		}
-		return false;
 
 	}
 
 	public static void main(String[] args) {
-		String query = "abcdefgxoxyzz";
 
 		// System.out.println(findLongestPalindrome(query));
-		System.out.print(isPalindromic("xoxoxz"));
+		System.out.print(findLongestPalindrome("abbaxxabcd"));
 	}
 }
