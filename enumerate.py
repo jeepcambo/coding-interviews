@@ -1,6 +1,8 @@
 #This program takes an input pattern some permutation containing '1', '0', and '?'
 #The program outputs all the possible permutations where '?' can be either '1' or '0'
 
+#Used in a programming interview
+
 import copy
 
 
@@ -34,9 +36,10 @@ def enum(str):
 
     print(all)
 
-
-# enum('1100', 0)
-# enum('1??0?1', 0)
+#main
+#Test cases
+enum('1100')
+enum('1??0?1')
 enum('0?1?')
 enum('0?1?')
 enum('?0111?')
